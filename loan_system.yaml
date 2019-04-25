@@ -1,0 +1,124 @@
+openapi: 3.0.0
+info:
+  title: "Loans API"
+  version: "1.0.0"
+paths:
+  /loans:
+    post:
+      summary: Create a loan application. Loans are automatically accepted.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Loan'
+      responses:
+        '201':
+          description: Return the new loan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewLoan'
+
+  /loans/{id}/payments:
+    put:
+      summary: Create a record of a payment made or missed.
+      parameters:
+        - in: path
+          name: id 
+          required: true
+          schema:
+            type: string
+          description: The Loan ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payment'
+      responses:
+        '201':
+          description: ok
+  
+  /loans/{id}/balance:
+    get:
+      summary: Get the volume of outstanding debt (i.e., debt yet to be paid) at some point in time.
+      parameters:
+        - in: path
+          name: id 
+          required: true
+          schema:
+            type: string
+          description: The Loan ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Balance'
+      responses:
+        '200':
+          description: Outstanding debt of loan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Debt'
+
+components:
+  schemas:
+    Loan:
+      properties:
+        amount:
+          type: number
+        term:
+          type: integer
+        rate:
+          type: number
+        date:
+          type: string
+          format: date-time
+      required:
+        - amount
+        - term
+        - rate
+        - date
+      type: object
+    NewLoan:
+      properties:
+        loan_id:
+          type: string
+        installment:
+          type: number
+      required:
+        - loan_id
+        - installment
+      type: object
+    Payment:
+      properties:
+        payment:
+          type: string
+        date:
+          type: string
+          format: date-time
+        amount: 
+          type: number
+      required:
+        - payment
+        - date
+        - amount
+      type: object
+    Balance:
+      properties:
+        date:
+          type: string
+          format: date-time
+      required:
+        - date
+      type: object
+    Debt:
+      properties:
+        balance:
+          type: number
+      required:
+       - balance
+      type: object
