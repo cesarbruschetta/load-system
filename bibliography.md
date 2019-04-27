@@ -1,7 +1,7 @@
-#LEITURAS RECOMENDADAS
+# LEITURAS RECOMENDADAS
 
 
-##TÓPICO: Implementação - Segurança
+## TÓPICO: Implementação - Segurança
 
 *[JSON Web token](https://medium.com/trainingcenter/json-web-tokens-explicado-dba4ae3a9579)
 
@@ -9,7 +9,7 @@
 
 
 
-##TÓPICO: Documentação da API
+## TÓPICO: Documentação da API
 
 *[Estrutura básica para documentação Swagger](https://swagger.io/docs/specification/basic-structure/)
 
