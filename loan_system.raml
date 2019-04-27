@@ -46,9 +46,27 @@ types:
       amount:
         type: number
         format: float
+traits:
+  dataValidation:
+    responses:
+      400:
+        description: Parameters received on body request are not valid 
+        body:
+          properties:
+            error: string
+            code: string
+  uriValidation:
+    responses: 
+      404:
+        description: ID received on uri not found
+        body: 
+          properties:
+            error: string
+            code: string
 
 /loan:
   post:
+    is: [dataValidation]
     description: Create a new loan. Loans are automatically accepted.
     body:
         type: Loan 
@@ -56,8 +74,6 @@ types:
         201:
             description: Return the new loan
             body: Loan_info
-        400:
-            description: Parameters received on request body are not valid 
 
   '/{id}':
     uriParameters:
@@ -67,19 +83,17 @@ types:
 
     /payment:
       post:
+        is: [dataValidation, uriValidation]
         description:  Create a record of a payment made or missed.
         body: 
             type: Payment
         responses:
           201:
             description: ok
-          400:
-            description: Parameters received on request body are not valid
-          404:
-            description: ID received on uri not found
 
     /balance:
       get:
+        is: [dataValidation, uriValidation]
         description: 'Get the volume of outstanding LoanBalance (i.e., LoanBalance yet to be paid) at some point in time.'
         body:
           type: Balance                
@@ -87,8 +101,4 @@ types:
           200:
             description: Outstanding LoanBalance of loan
             body: LoanBalance
-          400:
-            description: Parameters received on request body are not valid
-          404:
-            description: ID received on uri not found
                           
