@@ -16,39 +16,36 @@ types:
         format: float
       date:
         type: datetime
-        example: 2019-05-09 03:18Z
-
-    Loan_info:
-        properties:
-            loan_id:
-                type: string
-            installment:
-                type: number
-                format: float
-
-    Balance:
-        properties:
-            date:
-                type: datetime
-                example: 2019-05-09 03:18Z
-                required: false
-
-    LoanBalance:
-        properties:
-            balance:
-                type: number
-                format: float
-                
-    Payment:
-        properties:
-            payment:
-                type: string
-            date:
-                type: datetime
-                example: 2019-05-09 03:18Z
-            amount:
-                type: number
-                format: float
+        
+  Loan_info:
+    properties:
+      loan_id:
+        type: string
+      installment:
+        type: number
+        format: float
+        
+  Balance:
+    properties:
+      date:
+        type: datetime
+        required: false
+        
+  LoanBalance:
+    properties:
+      balance:
+        type: number
+        format: float
+        
+  Payment:
+    properties:
+      payment:
+        type: string
+      date:
+        type: datetime
+      amount:
+        type: number
+        format: float
 
 /loan:
   post:
