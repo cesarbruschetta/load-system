@@ -1,0 +1,65 @@
+#%RAML 1.0
+mediaType: application/json
+title: Loan API
+version: 1.0
+description: API to manage the loan payments control system from a fintech
+types:
+  additionalProperties: False
+  loan:
+    properties:
+      required: True
+      amount: number
+      term: integer
+      rate: number
+      date: date object
+    example:
+      amount: 1000
+      term: 12
+      rate: 0.05
+      date: "2019-05-09 03:18Z"
+  loan_id:
+    properties:
+      id: string
+      format: r'([\d]{3}-){2}[\d]{3}$'
+    example:
+      loan_id: "000-0000-0000-0000"
+  installment:
+    properties:
+      installment_value: number
+    example:
+      installment_value: 85.60
+  payment_status:
+    properties:
+      status: string
+      format: r'^(made | missed)$'
+  loan_balance:
+    properties:
+      balance: number
+    example:
+      balance: 40
+  /loans:
+    post:
+      description: New loan input
+      body:
+        type: loan
+    /<:id>:
+      /payments:
+        description: Installment input for a single id
+        post:
+          body:
+            properties:
+              payment: payment_status
+              date: date object
+              amount: number
+      /balance:
+        description: History of payments for a single id
+        get:
+          queryParameters:
+            required: False
+            date: string
+            format: r'([\d]{4})-([\d]{2}-){2}''
+
+
+    
+
+
