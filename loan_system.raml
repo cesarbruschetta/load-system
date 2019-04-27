@@ -1,0 +1,97 @@
+#%RAML 1.0
+title: Loans API
+version: v1
+mediaType: application/json
+
+types:
+  Loan:
+    properties:
+      amount:
+        type: number
+        format: float
+      term:
+        type: integer
+      rate:
+        type: number
+        format: float
+      date:
+        type: datetime
+        example: 2019-05-09 03:18Z
+
+    Loan_info:
+        properties:
+            loan_id:
+                type: string
+            installment:
+                type: number
+                format: float
+
+    Balance:
+        properties:
+            date:
+                type: datetime
+                example: 2019-05-09 03:18Z
+                required: false
+
+    LoanBalance:
+        properties:
+            balance:
+                type: number
+                format: float
+                
+    Payment:
+        properties:
+            payment:
+                type: string
+            date:
+                type: datetime
+                example: 2019-05-09 03:18Z
+            amount:
+                type: number
+                format: float
+
+/loan:
+  post:
+    description: Create a new loan. Loans are automatically accepted.
+    body:
+        type: Loan 
+    responses:
+        201:
+            description: Return the new loan
+            body: Loan_info
+        400:
+            description: Parameters received on request body are not valid 
+
+  '/{id}':
+    uriParameters:
+      id:
+        description: The Loan identifier.
+        type: string
+
+    /payment:
+      post:
+        description:  Create a record of a payment made or missed.
+        body: 
+            type: Payment
+        responses:
+          201:
+            description: ok
+          400:
+            description: Parameters received on request body are not valid
+          404:
+            description: ID received on uri not found
+
+    /balance:
+      get:
+        description: 'Get the volume of outstanding LoanBalance (i.e., LoanBalance yet to be paid) at some point in time.'
+        body:
+          type: Balance                
+        responses:
+          200:
+            description: Outstanding LoanBalance of loan
+            body: LoanBalance
+          400:
+            description: Parameters received on request body are not valid
+          404:
+            description: ID received on uri not found
+                          
