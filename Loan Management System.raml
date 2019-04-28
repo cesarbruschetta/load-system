@@ -1,14 +1,80 @@
 #%RAML 1.0
-title: My API With Types
-types:
-  Person:
-    properties:
-      name:
-        required: true
-        type: string
-      age:
-        required: false
-        type: number
-      /^note\d+$/: # restrict any properties whose keys start with "note"
-                   # followed by a string of one or more digits
-        type: string
+title: Loan Management System API
+version: 1.0
+
+documentation:
+ - title: Loan Management System
+   content: |
+     This API manages the loan payments control system 
+  
+/loans:
+  post:
+    description: |
+      
+      amount: loan amount in dollars.
+      term: number of months that will take until the loan gets paid-off.
+      rate: interest rate as decimal.
+      date: when the loan was requested (origination date as an ISO 8601 string).
+      loan_id: unique id of the loan.
+      installment: monthly loan paymen
+
+    body:
+      application/json: 
+        example: |
+    responses: 
+      202:
+        body: 
+          application/json:
+            example: |
+              Example of sent data
+              {"amount": 1000,"term": 12,"rate": 0.05,"date": "2019-05-09 03:18Z"}
+              
+              Example of received data
+              {"loan_id": "000-0000-0000-0000""installment": 85.60}
+              
+              Loan payment formula
+              "r = rate / 12"
+              "installment = [r + r / ((1 + r) ^ term - 1)] x amount"  
+                        
+/loans/<:id>/payments:
+  post:
+    description: |
+      payment: type of payment: made or missed.
+      date: payment date.
+      amount: amount of the payment made or missed in dollars.
+      The <:id> is going to be controled by token.
+    body:
+      application/json:
+        example: |
+    responses: 
+      202:
+        body: 
+          application/json:
+            example: | 
+              Example of sent data (Payment made)
+              {"payment": "made","date": "2019-05-07 04:18Z","amount": 85.60}
+              
+              Example of sent data (Payment missed)
+              {"payment": "missed","date": "2019-05-07 04:18Z","amount": 85.60}
+              
+/loans/<:id>/balance:  
+  get:
+    description: |
+      date: loan balance until this date.
+      balance: outstanding debt of loan.
+      Period filter: end_date is optional, the default is considered today.
+      The <:id> is going to be controled by token
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              Payload
+              Example of sent data
+              {"date": "2017-09-05 02:18Z"}     
+              
+              Reply
+              Example
+              {"balance": 40}
+              
+               
