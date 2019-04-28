@@ -1,0 +1,72 @@
+#%RAML 1.0
+mediaType: application/json
+title: Loan API
+version: 1.0
+description: API to manage the loan payments control system from a fintech
+baseUri: http://www.example.com/
+types:
+  loan_id:
+    pattern: ^([0-9]){3}-([0-9]){4}-([0-9]){4}-([0-9]){4}$   
+    example: 000-0000-0000-0000
+  payment:
+    pattern: (made|missed)
+    example: made
+  loan:
+    type: object
+    properties:
+      amount: number
+      term: number
+      rate: number
+      date: date-only
+/loans:
+  post:
+    description: Register a new loan
+    body:
+      type: (loan)
+      properties:
+        amount: number
+        term: number
+        rate: number
+        date: date-only
+    responses: 
+      201:
+        description: Loan registered
+        headers: 
+          Location: 
+            example: /loans/000-0000-0000-0000
+      500:
+        description: Service unavaliable. Please, try again later      
+  /{loan_id}/payments:
+    post:
+      description: Register loan's payment
+      body:
+        properties:
+          status: (payment)
+          date: date-only
+          amount: 
+            description: Use a dot for decimal number
+            type: number
+      responses:
+        200:
+          description: Payment registered
+        500:
+          description: Service unavaliable. Please, try again later          
+  /{loan_id}/balance:
+    get:
+      description: 'Get the balance: outstanding debt of loan'
+      responses:
+        200:
+          description: outstanding debt of loan id
+          body:
+            type: object
+            properties:
+              balance: number
+            example:
+              balance: 40
+        404:
+          description: invalid id
+          body:
+            example: Cannot find informations for the given id
+        500:
+          description: Service unavaliable. Please, try again later
+            
