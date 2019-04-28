@@ -20,7 +20,8 @@
 
 ## DJANGO APP
 
-*[Basic html for creating pages](https://www.freecodecamp.org/) -> Click on the "Curriculum" button on top.
+*[Basic html for creating pages](https://www.freecodecamp.org/) 
+-> Click on the "Curriculum" button on top of page.
 
 *[Creating a virtual environment for the project](https://docs.python.org/3/library/venv.html)
 
