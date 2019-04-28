@@ -3,14 +3,19 @@ mediaType: application/json
 title: Loan API
 version: 1.0
 description: API to manage the loan payments control system from a fintech
-baseUri: http://www.example.com/
+baseUri: http://localhost:3000/
 types:
   loan_id:
     pattern: ^([0-9]){3}-([0-9]){4}-([0-9]){4}-([0-9]){4}$   
     example: 000-0000-0000-0000
   payment:
-    pattern: (made|missed)
-    example: made
+    type: object
+    properties:
+      status:
+        pattern: (made|missed)
+        example: made
+      date: date-only
+      amount: number
   loan:
     type: object
     properties:
@@ -22,30 +27,31 @@ types:
   post:
     description: Register a new loan
     body:
-      type: (loan)
-      properties:
-        amount: number
-        term: number
-        rate: number
-        date: date-only
+      type: [loan]
+    headers:     
+      amount: number
+      term: number
+      rate: number
+      date: date-only
     responses: 
       201:
         description: Loan registered
-        headers: 
-          Location: 
-            example: /loans/000-0000-0000-0000
+        headers:
+          Location:         
+            description: '/loans/{loan_id}/'
       500:
-        description: Service unavaliable. Please, try again later      
+        description: Fail to register new loan. Please, try again later    
   /{loan_id}/payments:
     post:
       description: Register loan's payment
-      body:
-        properties:
-          status: (payment)
-          date: date-only
-          amount: 
-            description: Use a dot for decimal number
-            type: number
+      body: payment
+      headers:
+        status: 
+          pattern: (made|missed)
+        date: date-only
+        amount: 
+          description: Use a dot for decimal number
+          type: number
       responses:
         200:
           description: Payment registered
@@ -53,7 +59,7 @@ types:
           description: Service unavaliable. Please, try again later          
   /{loan_id}/balance:
     get:
-      description: 'Get the balance: outstanding debt of loan'
+      description: 'Get the balance: outstanding debt of loan'    
       responses:
         200:
           description: outstanding debt of loan id
