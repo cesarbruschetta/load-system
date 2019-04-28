@@ -1,7 +1,7 @@
-# LEITURAS RECOMENDADAS
+# RECOMENDED RESOURCES
 
 
-## TÓPICO: Implementação - Segurança
+## SECURITY IMPLEMENTATION
 
 *[JSON Web token](https://medium.com/trainingcenter/json-web-tokens-explicado-dba4ae3a9579)
 
@@ -9,12 +9,19 @@
 
 
 
-## TÓPICO: Documentação da API
+## API DOCUMENTATION
 
-*[Estrutura básica para documentação Swagger](https://swagger.io/docs/specification/basic-structure/)
+*[About HTTP methods and responses](https://www.tutorialspoint.com/http/)
 
-*[Sobre metodos http e códigos de resposta](https://www.tutorialspoint.com/http/)
+*[Oficial guide for api REST documentation](https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md/)
 
-*[Guia oficial para documentação REST](https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md/)
+*[REST: Good principles and guidelines](https://blog.caelum.com.br/rest-principios-e-boas-praticas/)
 
-*[REST: Princípios e boas práticas](https://blog.caelum.com.br/rest-principios-e-boas-praticas/)
+
+## DJANGO APP
+
+*[Basic html for creating pages](https://www.freecodecamp.org/) -> Click on the "Curriculum" button on top.
+
+*[Creating a virtual environment for the project](https://docs.python.org/3/library/venv.html)
+
+*[Getting started on your first Django App](https://docs.djangoproject.com/en/2.2/intro/tutorial01/)
