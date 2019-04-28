@@ -1,0 +1,148 @@
+#%RAML 1.0
+  title: Load System API
+  version: 1.0
+  baseUri: http://localhost:3000/
+  documentation:
+  - title: OpenWeatherMap API
+    content: Manage the loan payments control system from a fintech.
+  securitySchemes: 
+    auth:
+      type: x-auth-token
+      describedBy: 
+        queryParameters: 
+          appid:
+            required: true
+            displayName: appid
+            description: API key to authorize requests,
+            type: string
+  types:
+    Loan:
+      displayName: Loan
+      type: object
+      properties:
+        amount:
+          required: true
+          displayName: amount
+          description: The amount of the loan payment, in dollars.
+          type: number
+          format: double
+          example: 1000
+        term:
+          required: true
+          displayName: term
+          description: Number of months that will take until the loan gets paid-off.
+          type: number
+          format: int
+          example: 12
+        rate:
+          required: true
+          displayName: rate
+          description: Interest rate as decimal.
+          type: number
+          format: double
+          example: 0.05
+        date:
+          required: true
+          displayName: date
+          description: when the loan was requested (origination date as an ISO 8601 string).
+          type: datetime
+          example: "2019-05-09T03:18:00Z"
+    payment:
+      displayName: payment
+      type: object
+      properties: 
+        payment:
+          required: true
+          displayName: Payment
+          description: type of payment, made or missed.
+          type: string
+          enum: ['made','missed']
+          example: "made"
+        date:
+          required: true
+          displayName: Date
+          description: payment date
+          type: datetime
+          example: "2019-05-09T03:18:00Z"
+        amount:
+          required: true
+          displayName: Amount
+          description: amount of the payment made or missed in dollars.
+          type: number
+          format: double
+          example: 85.60
+  /loans:
+    displayName: Loans
+    post:
+      description: Create a loan application. Loans are automatically accepted.
+      displayName: post loans
+      protocols: HTTP
+      securedBy: auth
+      body: 
+        application/json:
+          schema: Loan
+          example: {
+                    "amount": 1000,
+                    "term": 12,
+                    "rate": 0.05,
+                    "date": "2019-05-09T03:18:00Z"
+                  }
+          description: Example of post loan request.
+          displayName: POST Loan
+      responses: 
+        200:
+          description: new loan inserted.
+          body: 
+            application/json:
+              displayName: Loan Response
+              description: After post a loan you will receive a json with loan_id and installment.
+              example: {
+                        "loan_id": "000-0000-0000-0000",
+                        "installment": 85.60
+                       }
+    /{id}:
+      /payments:
+        post:
+          protocols: HTTP
+          description: Create a record of a payment made or missed in a specific loan id.
+          securedBy: auth
+          displayName: POST payments
+          body: 
+            application/json:
+              schema: payment
+              example: {
+                          "payment": "made",
+                          "date": "2019-05-09T03:18:00Z",
+                          "amount": 85.60
+                        }
+              displayName: Post payment
+              description: Example of post payment request.
+          responses: 
+            200:
+              description: Success, receive the remaining amount and payment id.
+              body: 
+                application/json:
+                  example: {
+                            "paymend_id": 1,
+                            "amount": 1000
+                           }
+      /balance:
+        get:
+          protocols: HTTP
+          displayName: GET the balance of the loan.
+          description: Get the volume of outstanding debt (i.e., debt yet to be paid) at some point in time.
+          queryParameters: 
+            date:
+              displayName: Date
+              description: loan balance until the param date if empty return all loan balance.
+              type: datetime
+              example: "2019-05-09T03:18:00Z"
+          securedBy: auth
+          responses: 
+            200:
+              description: balance, outstanding debt of loan.
+              body: 
+                application/json:
+                  example: {
+                              "balance": 40
+                            }
