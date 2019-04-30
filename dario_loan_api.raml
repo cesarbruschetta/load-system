@@ -1,6 +1,6 @@
 #%RAML 1.0
-mediaType: application/json
 title: Loan API
+protocols: [ HTTP, HTTPS ]
 version: 1.0
 description: API to manage the loan payments control system from a fintech
 securitySchemes:
@@ -10,84 +10,87 @@ securitySchemes:
     describedBy:
       headers:
         Authorization:
-          Authorization:
-            description: X-AuthToken
-            type: string
-            required: true
+          description: X-AuthToken
+          type: string
+          required: true
       responses:
         401:
           description: Authentication problem (JWT not set or expired)
     settings:
       roles: []
 types:
-  loan_id:
-    pattern: ^([0-9]){3}-([0-9]){4}-([0-9]){4}-([0-9]){4}$   
-    example: 000-0000-0000-0000
-  payment:
-    type: object
-    properties:
-      status:
-        pattern: (made|missed)
-        example: made
-      date: date-only
-      amount: number
-  loan:
+  loan_request:
     type: object
     properties:
       amount: number
-      term: number
+      term: integer
       rate: number
-      date: date-only
+      date: 
+        type: date-only
+    example:      
+      amount: 1000
+      term: 12
+      rate: 0.05
+      date: "2019-05-09"
+  balance: number
+baseUri: http://www.example.com # To be specified
 /loans:
-  post:
-    description: Register a new loan
-    body:
-      type: [loan]
-    headers:     
-      amount: number
-      term: number
-      rate: number
-      date: date-only
-    responses: 
+  post: 
+    description: Insert a new loan request
+    body: 
+      application/json:
+        type: loan_request
+        properties:        
+          amount: 
+            type: number
+            example: 1000
+          term: 
+            description: Mesured in months
+            type: integer
+            example: 12
+          rate: 
+            type: number
+            description: Indicate float with a dot
+            example: 0.5
+          date: 
+            type: date-only
+            example: 2019-05-09     
+    responses:
       201:
-        description: Loan registered
-        headers:
-          Location:         
-            description: '/loans/{loan_id}/'
-      500:
-        description: Fail to register new loan. Please, try again later    
-  /{loan_id}/payments:
-    post:
-      description: Register loan's payment
-      body: payment
-      headers:
-        status: 
-          pattern: (made|missed)
-        date: date-only
-        amount: 
-          description: Use a dot for decimal number
-          type: number
-      responses:
-        200:
-          description: Payment registered
-        500:
-          description: Service unavaliable. Please, try again later          
-  /{loan_id}/balance:
-    get:
-      description: 'Get the balance: outstanding debt of loan'    
-      responses:
-        200:
-          description: outstanding debt of loan id
-          body:
-            type: object
-            properties:
-              balance: number
-            example:
-              balance: 40
-        404:
-          description: invalid id
-          body:
-            example: Couldn't find informations for the given id
-        500:
-          description: Service unavaliable. Please, try again later
-            
+        description: New loan registered
+        headers: 
+          Content-Location: 
+            example: '/loan/{id}'           
+  /{id}/payments:
+      description: Payment information for a single loan id
+      post:
+        body:
+          application/json:            
+            properties: 
+              status:
+                pattern: (made|missed)
+                example: made
+              date: 
+                type: date-only
+                example: 2019-05-09
+              amount: 
+                type: number
+                example: 150.00
+        responses:
+          200:
+            description: payment registered
+          400:
+            description: Invalid payment informations
+  /{id}/balance:
+      description: History of payments for a single id
+      get:
+        queryParameters:
+          date: string
+          format: date-only
+        responses:
+          200:
+            body: 
+              application/json:                
+                type: balance
+          400:
+            description: 'bad request: informações inválidas'
