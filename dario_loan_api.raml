@@ -3,7 +3,22 @@ mediaType: application/json
 title: Loan API
 version: 1.0
 description: API to manage the loan payments control system from a fintech
-baseUri: http://localhost:3000/
+securitySchemes:
+  JWT:
+    description: Authenticv this to any method that needs a valid JWT to be set.
+    type: x-{other}
+    describedBy:
+      headers:
+        Authorization:
+          Authorization:
+            description: X-AuthToken
+            type: string
+            required: true
+      responses:
+        401:
+          description: Authentication problem (JWT not set or expired)
+    settings:
+      roles: []
 types:
   loan_id:
     pattern: ^([0-9]){3}-([0-9]){4}-([0-9]){4}-([0-9]){4}$   
