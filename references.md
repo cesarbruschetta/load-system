@@ -3,7 +3,9 @@
 
 ## SECURITY IMPLEMENTATION
 
-*[JSON Web token](https://medium.com/trainingcenter/json-web-tokens-explicado-dba4ae3a9579)
+*[JWT - Json Web Token](https://medium.com/trainingcenter/json-web-tokens-explicado-dba4ae3a9579)
+
+*[Online decoder, verifier and generator for JWT (https://jwt.io/)
 
 *[DJANGO Middleware](https://django-portuguese.readthedocs.io/en/1.0/topics/http/middleware.html)
 
